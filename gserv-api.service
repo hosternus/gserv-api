@@ -1,5 +1,5 @@
 [Unit]
-DescriptionDescription=GservAPI Service - FastAPI application for serving mobile app (Gserv)
+Description=GservAPI Service - FastAPI application for serving mobile app (Gserv)
 After=syslog.target
 After=network.target
 After=nginx.service
