@@ -1,19 +1,47 @@
 import datetime
 
 from sqlalchemy import (Boolean, Column, DateTime, Float, ForeignKey, Integer,
-                        String)
+                        String, Time)
+from sqlalchemy.orm import relationship
 
 from baseCore.base import Base, Engine
 
 
-class Filter(Base):
+class Repr():
+    def __repr__(self) -> str:
+        return str(self.__dict__)
+
+
+class Filter(Base, Repr):
     __tablename__ = "Filter"
 
     id = Column(Integer, primary_key=True, unique=True, nullable=False)
     name = Column(String, nullable=False, unique=True)
 
 
-class ExecutorService(Base):
+class AssociationExecToExpert(Base, Repr):
+    __tablename__ = "AssociationExecToExpert"
+
+    id = Column(Integer, primary_key=True, unique=True, nullable=False)
+    expert_id = Column(Integer, ForeignKey('Expert.id'), nullable=False)
+    expert_id = relationship('Expert')
+    exec_id = Column(Integer, ForeignKey('ExecOne.id'), nullable=False)
+
+
+class Expert(Base, Repr):
+    __tablename__ = 'Expert'
+
+    id = Column(Integer, primary_key=True, unique=True, nullable=False)
+    name = Column(String, nullable=False)
+    surname = Column(String, nullable=False)
+    organisation_id = Column(Integer, nullable=False)
+    creation_date = Column(DateTime,
+                           default=datetime.datetime.utcnow,
+                           nullable=False)
+    status = Column(Boolean, default=True, nullable=False)
+
+
+class ExecutorService(Base, Repr):
     __tablename__ = "ExecutorService"
 
     id = Column(Integer, primary_key=True, unique=True, nullable=False)
@@ -31,7 +59,7 @@ class ExecutorService(Base):
     status = Column(Boolean, default=True, nullable=False)
 
 
-class User(Base):
+class User(Base, Repr):
     __tablename__ = "User"
 
     id = Column(Integer, primary_key=True, unique=True, nullable=False)
@@ -46,7 +74,7 @@ class User(Base):
     status = Column(Boolean, default=True, nullable=False)
 
 
-class UserFeedback(Base):
+class UserFeedback(Base, Repr):
     __tablename__ = "UserFeedback"
 
     id = Column(Integer, primary_key=True, unique=True, nullable=False)
@@ -60,7 +88,7 @@ class UserFeedback(Base):
     status = Column(Boolean, default=True, nullable=False)
 
 
-class ExecOne(Base):
+class ExecOne(Base, Repr):
     __tablename__ = "ExecOne"
 
     id = Column(Integer, primary_key=True, unique=True, nullable=False)
@@ -70,13 +98,15 @@ class ExecOne(Base):
     name = Column(String, nullable=False)
     description = Column(String, nullable=False, unique=True)
     price = Column(Float, nullable=False)
+    experts = relationship('AssociationExecToExpert')
+    duration = Column(Time, nullable=False)
     creation_date = Column(DateTime,
                            default=datetime.datetime.utcnow,
                            nullable=False)
     status = Column(Boolean, default=True, nullable=False)
 
 
-class UserOrder(Base):
+class UserOrder(Base, Repr):
     __tablename__ = "UserOrder"
 
     id = Column(Integer, primary_key=True, unique=True, nullable=False)
@@ -91,7 +121,7 @@ class UserOrder(Base):
     accepted = Column(Boolean, default=False, nullable=False)
 
 
-class UserVerificationSession(Base):
+class UserVerificationSession(Base, Repr):
     __tablename__ = "UserVerificationSession"
 
     id = Column(Integer, primary_key=True, unique=True, nullable=False)

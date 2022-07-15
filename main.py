@@ -127,3 +127,7 @@ def postverification(verObject: CreatedUser):
 
 # if __name__ == '__main__':
 #     uvicorn.run('app:app', host='0.0.0.0', port=80, reload=True)
+
+
+name = Session.query(ExecOne).get(1).experts
+print(name)
